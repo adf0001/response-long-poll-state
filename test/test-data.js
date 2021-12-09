@@ -9,7 +9,7 @@ module.exports = {
 		if (typeof window !== "undefined") throw "disable for browser";
 
 		//http server
-		var getState = function () { return "ok" };		//user-define state-callback
+		var getState = function (userKey) { return "ok" };		//user-define state-callback
 
 		var server = http.createServer((req, res) => {
 			response_long_poll_state(res, getState);
@@ -41,7 +41,7 @@ module.exports = {
 		if (typeof window !== "undefined") throw "disable for browser";
 
 		//http server
-		var getState = function () { return "ok" };		//user-define state-callback
+		var getState = function (userKey) { return "ok" };		//user-define state-callback
 
 		var server = http.createServer((req, res) => {
 			response_long_poll_state(res, getState,
@@ -73,6 +73,36 @@ module.exports = {
 		);
 	},
 
+	".getCurrent()": function (done) {
+		if (typeof window !== "undefined") throw "disable for browser";
+
+		//http server
+		var getState = function (userKey) { return "ok" };		//user-define state-callback
+
+		var server = http.createServer((req, res) => {
+			//get current state instantly.
+			//getCurrent(res, stateStringCallback, options)
+			response_long_poll_state.getCurrent(res, getState);
+		});
+		server.listen();
+
+		//http client
+		var tm0 = new Date();
+
+		http.get(
+			"http://127.0.0.1:" + server.address().port,
+			function (res) {
+				var str = '';
+				res.on('data', (chunk) => { str += chunk; });
+				res.on('end', () => {
+					console.log(str);
+					console.log("tm=" + ((new Date()) - tm0));
+					server.close();
+					done(!(str === "//\nok"));
+				});
+			}
+		);
+	},
 
 };
 

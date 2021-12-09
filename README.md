@@ -13,11 +13,16 @@ npm install response-long-poll-state
 var http = require('http');
 var response_long_poll_state = require("response-long-poll-state");
 
-var getState = function () { return "ok" };		//user-define state-callback
+var getState = function ( userKey ) { return "ok" };		//user-define state-callback
 
 var server = http.createServer((req, res) => {
 	//longPollingState(res, stateStringCallback, options)
 	response_long_poll_state(res, getState);
+	
+	//or get current state instantly.
+	//getCurrent(res, stateStringCallback, options)
+	//response_long_poll_state.getCurrent(res, getState);
+
 });
 server.listen();
 setTimeout(() => { 

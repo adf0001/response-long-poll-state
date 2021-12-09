@@ -1,6 +1,6 @@
 {
   "name": "response-long-poll-state",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "http response tool for long polling state",
   "main": "response-long-poll-state.js",
   "scripts": {

@@ -78,9 +78,17 @@ function longPollingState(res, stateStringCallback, options) {
 	eventEmitter.once("state-change", evtlistener);
 }
 
+function getCurrent(res, stateStringCallback, options) {
+	var stateStr = stateStringCallback(options && options.userKey);
+	res.writeHead(200, { "Content-type": "text/plain;charset=UTF-8" });
+	res.end("//\n" + stateStr);
+}
+
 //module
 
 module.exports = exports = longPollingState;
 
 exports.longPollingState = longPollingState;
 exports.defaultEventEmitter = defaultEventEmitter;
+
+exports.getCurrent = getCurrent;
