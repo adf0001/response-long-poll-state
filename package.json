@@ -1,0 +1,17 @@
+{
+  "name": "response-long-poll-state",
+  "version": "1.0.1",
+  "description": "http response tool for long polling state",
+  "main": "response-long-poll-state.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "http",
+    "response",
+    "long-poll",
+    "state"
+  ],
+  "author": "fwg",
+  "license": "ISC"
+}
