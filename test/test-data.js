@@ -104,6 +104,33 @@ module.exports = {
 		);
 	},
 
+	".getCurrent()/format string": function (done) {
+		if (typeof window !== "undefined") throw "disable for browser";
+
+		var server = http.createServer((req, res) => {
+			//a string as `stateStringCallback`
+			response_long_poll_state.getCurrent(res, "check");
+		});
+		server.listen();
+
+		//http client
+		var tm0 = new Date();
+
+		http.get(
+			"http://127.0.0.1:" + server.address().port,
+			function (res) {
+				var str = '';
+				res.on('data', (chunk) => { str += chunk; });
+				res.on('end', () => {
+					console.log(str);
+					console.log("tm=" + ((new Date()) - tm0));
+					server.close();
+					done(!(str === "//\ncheck"));
+				});
+			}
+		);
+	},
+
 };
 
 // for html page

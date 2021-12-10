@@ -79,7 +79,9 @@ function longPollingState(res, stateStringCallback, options) {
 }
 
 function getCurrent(res, stateStringCallback, options) {
-	var stateStr = stateStringCallback(options && options.userKey);
+	var stateStr = (typeof stateStringCallback === "function")
+		? stateStringCallback(options && options.userKey)
+		: stateStringCallback;
 	res.writeHead(200, { "Content-type": "text/plain;charset=UTF-8" });
 	res.end("//\n" + stateStr);
 }
