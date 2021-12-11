@@ -3,6 +3,8 @@
 
 var EventEmitter = require('events');
 
+var string_from_callback = require("string-from-callback");
+
 var defaultEventEmitter = new EventEmitter();
 
 var ACTIVE_PULSE_SECONDS = 20;
@@ -42,7 +44,8 @@ function longPollingState(res, stateStringCallback, options) {
 		if (tmid) { clearTimeout(tmid); tmid = false; };
 		if (evtlistener) { eventEmitter.removeListener("state-change", evtlistener); evtlistener = null; };
 		if (!res.writableEnded) {
-			try { res.end("\n" + stateStringCallback(options.userKey)); } catch (ex) { }
+
+			try { res.end("\n" + string_from_callback(stateStringCallback, options.userKey)); } catch (ex) { }
 		}
 		console.log("state polling finished");
 	}
@@ -79,9 +82,7 @@ function longPollingState(res, stateStringCallback, options) {
 }
 
 function getCurrent(res, stateStringCallback, options) {
-	var stateStr = (typeof stateStringCallback === "function")
-		? stateStringCallback(options && options.userKey)
-		: stateStringCallback;
+	var stateStr = string_from_callback(stateStringCallback, options && options.userKey);
 	res.writeHead(200, { "Content-type": "text/plain;charset=UTF-8" });
 	res.end("//\n" + stateStr);
 }

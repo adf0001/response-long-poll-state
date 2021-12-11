@@ -77,7 +77,7 @@ module.exports = {
 		if (typeof window !== "undefined") throw "disable for browser";
 
 		//http server
-		var getState = function (userKey) { return "ok" };		//user-define state-callback
+		var getState = function (userKey) { return {ret:"ok"} };		//user-define state-callback
 
 		var server = http.createServer((req, res) => {
 			//get current state instantly.
@@ -98,7 +98,7 @@ module.exports = {
 					console.log(str);
 					console.log("tm=" + ((new Date()) - tm0));
 					server.close();
-					done(!(str === "//\nok"));
+					done(!(str === '//\n{"ret":"ok"}'));
 				});
 			}
 		);
